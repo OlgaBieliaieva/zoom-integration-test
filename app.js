@@ -5,17 +5,20 @@ import axios from "axios";
 import "dotenv/config";
 // import userRouter from "./routes/userRouter.js";
 import meetingsRouter from "./routes/meetingsRouter.js";
+import meetingSDKRouter from "./routes/meetingSDKRouter.js";
 
 const { PORT = 3000 } = process.env;
 
 const app = express();
 app.use(morgan("tiny"));
-app.use(cors());
-app.use(express.json());
+app.use(express.json(), cors())
+app.options('*', cors())
 app.use(express.static("public"));
 
 // app.use("/api/zoom/user", userRouter);
+app.use("/api/zoom/meeting-sdk", meetingSDKRouter);
 app.use("/api/zoom/meetings", meetingsRouter);
+
 
 app.use((_, res) => {
   res.status(404).json({ message: "Not found" });
@@ -101,5 +104,5 @@ app.use((err, req, res, next) => {
 // })
 
 app.listen(PORT, () => {
-  console.log("Example app listening on port 3000!");
+  console.log(`Example app listening on port ${PORT}!`);
 });
